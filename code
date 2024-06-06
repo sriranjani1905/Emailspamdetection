@@ -1,0 +1,53 @@
+import numpy as np
+import pandas as pd
+
+import os
+for dirname, _, filenames in os.walk('/kaggle/input'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
+
+data=pd.read_csv('/content/drive/MyDrive/spam_ham_dataset.csv.zip')
+data
+
+data.columns
+
+data.info()
+
+data.isna().sum()
+
+#data['Spam']=data['label'].apply(lambda x:1 if x=='spam' else 0)
+#data.head(5)
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(data.text,data.label_num,test_size=0.45)
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+from sklearn.naive_bayes import MultinomialNB
+
+from sklearn.pipeline import Pipeline
+clf=Pipeline([
+    ('vectorizer',CountVectorizer()),
+    ('nb',MultinomialNB())
+])
+
+  #Tarining The Model
+clf.fit(X_train,y_train)
+
+Pipeline(steps=[('vectorizer', CountVectorizer()), ('nb', MultinomialNB())])
+  
+
+emails=[
+    'artemisia upheld congolese aristotle doomsday simply buckshot peppy gedanken baudelaire chaste prime togo cotta beirut taxiway',
+    'Will u meet ur dream partner soon? Is ur career off 2 a flyng start? 2 find out free, txt HORO followed by ur star sign, e. g. HORO ARIES',
+    'aekdju , the cat raisedour us licensed doctors willprescribes your medication for freemedications shipped overnight to your door .phentermine , adipex soma , fioriicet , ulltram , viagra , and many , many others .artemisia upheld congolese aristotle doomsday simply buckshot peppy gedanken baudelaire chaste prime togo cotta beirut taxiway',
+    'november prelim wellhead production - estimatedaren ,fyi .',
+    'centana mobil april 00panenergy purchase : deal # 231758 .gas in the amount of 271 mmbtus for april lst was purchased from panenergy on'
+]
+
+clf.predict(emails)
+
+  clf.score(X_test,y_test)
+
+
+  
